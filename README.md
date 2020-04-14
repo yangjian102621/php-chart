@@ -2,22 +2,9 @@
 一个 PHP 图表生成工具，开箱即用，生成各种折线图，2D/3D 饼状图，条形图等。
 
 ## 如何使用
+```bash
 composer install rockyang/php-chart
-
-## 效果预览
-
-### 折线图
-![折线图](image/broken-chart.png)
-
-### 饼状图
-![饼状图](image/pie-chart.png)
-
-### 条形图
-![条形图](image/square-2D-chart.png)
-
-![条形图](image/square-3D-chart.png)
-
-![条形图](image/circle-3D-chart.png)
+```
 
 ## Sample code
 ```php
@@ -52,3 +39,18 @@ $chart->showChart();
 // save image to file
 $chart->saveChart("{$dir}/broken-chart.png", 'png');
 ```
+
+## 效果预览
+
+### 折线图
+![折线图](image/broken-chart.png)
+
+### 饼状图
+![饼状图](image/pie-chart.png)
+
+### 条形图
+![条形图](image/square-2D-chart.png)
+
+![条形图](image/square-3D-chart.png)
+
+![条形图](image/circle-3D-chart.png)
