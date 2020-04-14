@@ -3,7 +3,7 @@
 
 ## 如何使用
 ```bash
-composer install rockyang/php-chart
+composer install rockyangs/php-chart
 ```
 
 ## Sample code
