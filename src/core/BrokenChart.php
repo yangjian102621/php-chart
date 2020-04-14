@@ -14,62 +14,62 @@ class BrokenChart implements IChart
 	/* resource of Image */
 	private $image = NULL;
 	/* size of canvas （画布大小） */
-	private $bg_size = array(600, 400);
+	public $bg_size = array(600, 400);
 	/* arrow size(坐标轴箭头大小) */
-	private $arrow_size = array(8, 8);
+    public $arrow_size = array(5, 5);
 	
 	/* data of chart */
-	private $data;
+    public $data;
 	/* title of chart */
-	private $title;
+    public $title;
 	
 	/* backcground color of canvas */
-	private $bg_color = array(255, 255, 0);
+    public $bg_color = array(255, 255, 0);
 	/* color oof title */
-	private $t_color  = array(180, 0, 0);
+    public $t_color  = array(180, 0, 0);
 	/* color of string */
-	private $str_color = array(0, 0, 255);
+    public $str_color = array(0, 0, 255);
 	/* color of dot */
-	private $dot_color = array(255, 0, 255);
+    public $dot_color = array(255, 0, 255);
 	/* axis color (轴线颜色) */
-	private $axis_color = array(0, 0, 0);
+    public $axis_color = array(0, 0, 0);
 	/* 英文字体大小 */
-	private $en_fsize = 3;
+    public $en_fsize = 3;
 	/* 坐标轴标尺长度 */
-	private $staff_width = 5;
+    public $staff_width = 5;
 	/* 折线点的半径 */
-	private $dot_r = 10;
+    public $dot_r = 10;
 	
 	/* title font */
-	private $t_font = 1;
+    public $t_font = 1;
 	/* string font */
-	private $str_font = 0;
+    public $str_font = 0;
 	/* font size of title */
-	private $t_fsize = 20;
+    public $t_fsize = 20;
 	/* font size of string */
-	private $str_fsize = 11;
+    public $str_fsize = 11;
 	private static $_FONT = array(
 		0 => 'hanyi.ttf',
 		1 => 'hanyi-xiu-ying.ttf'
 	);
-	private $font_dir = NULL;
+    public $font_dir = NULL;
 	
 	/* 画布左边距 */
-	private $margin_left = 50;
+    public $margin_left = 50;
 	/* 画布右边距 */
-	private $margin_right = 20;
+    public $margin_right = 20;
 	/* 画布上边距 */
-	private $margin_top = 10;
+    public $margin_top = 10;
 	/* 画布下边距 */
-	private	$margin_bottom = 50;
+    public	$margin_bottom = 50;
 	/* Y轴距离顶部的距离 */
-	private $axisY_top = 50;
+    public $axisY_top = 50;
 	/* title space to chart (标题和图表的距离) */
-	private $t2c_space = 20;
-	/* measure of data (计数单位) */
-	private $measure = '人次';
+    public $t2c_space = 20;
+	/* unit of data (计数单位) */
+    public $unit = '';
 	/* y轴标点 步长 => 点数 */
-	private $axisy = array(100, 10);
+    public $axisy = array(100, 10);
 	
 	/* constructor */
 	public function __construct( $_config )
@@ -91,7 +91,7 @@ class BrokenChart implements IChart
 		if ( isset($_config['dot_r']) ) $this->dot_r = $_config['dot_r'];
 		if ( isset($_config['t_fsize']) ) $this->t_fsize = $_config['t_fsize'];
 		if ( isset($_config['str_fsize']) ) $this->str_fsize = $_config['str_fsize'];
-		if ( isset($_config['measure']) ) $this->measure = $_config['measure'];
+		if ( isset($_config['unit']) ) $this->unit = $_config['unit'];
 		if ( isset($_config['t_font']) ) $this->t_font = $_config['t_font'];
 		if ( isset($_config['str_font']) ) $this->str_font = $_config['str_font'];
 		if ( isset($_config['arrow_size']) ) $this->arrow_size = $_config['arrow_size'];
@@ -106,11 +106,12 @@ class BrokenChart implements IChart
     /**
      * draw image
      */
-	private function draw()
+	public function draw()
     {
         $this->image = $this->getImageCanvas($this->bg_size, $this->bg_color);
         $this->drawTitle();
         $this->drawBrokenLine();
+        return $this;
     }
 
     /**
@@ -157,18 +158,40 @@ class BrokenChart implements IChart
 			// 绘制Y坐标轴
 			imageline($this->image, $this->margin_left, $this->axisY_top, $this->margin_left, $this->bg_size[0], $_color_axis);
 			// 绘制箭头
-			imageline($this->image, $this->margin_left - $this->arrow_size[0], $this->axisY_top + $this->arrow_size[1], $this->margin_left, $this->axisY_top, $_color_axis);
-			imageline($this->image, $this->margin_left + $this->arrow_size[0], $this->axisY_top + $this->arrow_size[1], $this->margin_left, $this->axisY_top, $_color_axis);
+			imageline($this->image,
+                $this->margin_left - $this->arrow_size[0],
+                $this->axisY_top + $this->arrow_size[1],
+                $this->margin_left, $this->axisY_top, $_color_axis);
+			imageline($this->image,
+                $this->margin_left + $this->arrow_size[0],
+                $this->axisY_top + $this->arrow_size[1],
+                $this->margin_left, $this->axisY_top, $_color_axis);
 			
 			// 绘制单位
-			imagettftext($this->image, $this->str_fsize, 0, $this->margin_left + $this->arrow_size[0], $this->axisY_top, $_color_axis, $_font, '单位:'.$this->measure);
+			imagettftext($this->image,
+                $this->str_fsize, 0,
+                $this->margin_left + $this->arrow_size[0],
+                $this->axisY_top, $_color_axis,
+                $_font, '单位:'.$this->unit);
 			
 			// 绘制X坐标轴
 			$_x_width = $this->bg_size[0] - $this->margin_right;
-			imageline($this->image, 0, $this->bg_size[1] - $this->margin_bottom, $_x_width, $this->bg_size[1] - $this->margin_bottom, $_color_axis);
+			imageline($this->image, 0,
+                $this->bg_size[1] - $this->margin_bottom,
+                $_x_width, $this->bg_size[1] - $this->margin_bottom, $_color_axis);
 			// 绘制箭头
-			imageline($this->image, $_x_width - $this->arrow_size[0], ($this->bg_size[1] - $this->margin_bottom - $this->arrow_size[1]), $_x_width, $this->bg_size[1] - $this->margin_bottom, $_color_axis);
-			imageline($this->image, $_x_width - $this->arrow_size[0], ($this->bg_size[1] - $this->margin_bottom + $this->arrow_size[1]), $_x_width, $this->bg_size[1] - $this->margin_bottom, $_color_axis);
+			imageline($this->image,
+                $_x_width - $this->arrow_size[0],
+                ($this->bg_size[1] - $this->margin_bottom - $this->arrow_size[1]),
+                $_x_width,
+                $this->bg_size[1] - $this->margin_bottom,
+                $_color_axis);
+			imageline($this->image,
+                $_x_width - $this->arrow_size[0],
+                ($this->bg_size[1] - $this->margin_bottom + $this->arrow_size[1]),
+                $_x_width,
+                $this->bg_size[1] - $this->margin_bottom,
+                $_color_axis);
 			
 			//确定坐标原点
 			$_x_0 = $this->margin_left;

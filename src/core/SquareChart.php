@@ -1,4 +1,4 @@
-<?
+<?php
 namespace chart\core;
 /**
  * 生成柱形统计图<br />
@@ -14,63 +14,65 @@ class SquareChart implements IChart
 	/* image resource */
 	private $image = NULL;
 	/* canvas size of chart (画布大小) */
-	private $bg_size = array(400, 500);
+	public $bg_size = array(400, 500);
+    /* arrow size(坐标轴箭头大小) */
+    public $arrow_size = array(5, 5);
 	/* size of Column chart 方块的大小 */
-	private $square_size = array(40, 20);
+    public $square_size = array(40, 20);
 	/* angle of Polygon */
-	private $p_angle = 45;
+    public $p_angle = 45;
 	/* y轴标点 步长 => 点数 */
-	private $axisy = array(100, 10);
-	/* measure of data (计数单位) */
-	private $measure = '';
+    public $axisy = array(100, 10);
+	/* unit of data (计数单位) */
+    public $unit = '';
 	/* 英文字体大小 */
-	private $en_fsize = 3;
+    public $en_fsize = 3;
 	/* 坐标轴标尺长度 */
-	private $staff_width = 8;
+    public $staff_width = 8;
 
 	/* data of chart */
-	private $data = NULL;
-	private $title;
+    public $data = NULL;
+    public $title;
 	/**
 	 * $t_chart 		int    	(图像类型)
 	 * 0 => 2D条形图
 	 * 1 => 3D 条形图
 	 * 2 => 3D 柱形图 
 	 */
-	private $t_chart = 1;
+    public $t_chart = 1;
 
 	/* color of canvas */
-	private $bg_color = array(255,255,255);
+    public $bg_color = array(255,255,255);
 	/* color of title */
-	private $t_color = array(180, 0, 0);
+    public $t_color = array(180, 0, 0);
 	/* color of string */
-	private $str_color = array(0, 64, 128);
+    public $str_color = array(0, 64, 128);
 	/* color of axis */
-	private $axis_color = array(128, 64, 64);
+    public $axis_color = array(128, 64, 64);
 
 	/* 画布左边距 */
-	private $margin_left = 50;
+    public $margin_left = 50;
 	/* 画布右边距 */
-	private $margin_right = 20;
+    public $margin_right = 20;
 	/* 画布上边距 */
-	private $margin_top = 10;
+    public $margin_top = 10;
 	/* 画布下边距 */
-	private	$margin_bottom = 50;
+    public	$margin_bottom = 50;
 	/* Y轴距离顶部的距离 */
-	private $axisY_top = 50;
+    public $axisY_top = 50;
 	/* title space to chart (标题和图表的距离) */
 	private $t2c_space = 20;
 
-	private $t_fsize = 20;
-	private $str_fsize = 12;
+    public $t_fsize = 20;
+    public $str_fsize = 12;
 
-	private $t_font = 0;
-	private $str_font = 0;
+    public $t_font = 0;
+    public $str_font = 0;
 	private static $_FONT = array(
 		0 => 'hanyi.ttf',
 		1 => 'hanyi-xiu-ying.ttf'
 	);
-	private $font_dir = NULL;
+    public $font_dir = NULL;
 
 	public function __construct( $_config )
     {
@@ -97,20 +99,21 @@ class SquareChart implements IChart
 		if ( isset($_config['axis_color']) ) $this->axis_color = $_config['axis_color'];
 		if ( isset($_config['en_fsize']) ) $this->en_fsize = $_config['en_fsize'];
 		if ( isset($_config['t2c_space']) ) $this->t2c_space = $_config['t2c_space'];
-		if ( isset($_config['measure']) ) $this->measure = $_config['measure'];
+		if ( isset($_config['unit']) ) $this->unit = $_config['unit'];
 		if ( isset($_config['t_chart']) ) $this->t_chart = $_config['t_chart'];
 
         $this->font_dir = dirname(__DIR__).'/fonts/';
 	}
 
     /**
-     * draw image
+     *
      */
-	private function draw()
+	public function draw()
     {
         $this->image = $this->getImageCanvas($this->bg_size, $this->bg_color);
         $this->drawTitle();
         $this->drawSquare();
+        return $this;
     }
 
     /**
@@ -144,10 +147,44 @@ class SquareChart implements IChart
 		$_font = $this->font_dir.self::$_FONT[$this->str_font];
 
 		// 绘制Y坐标轴
-		imageline($this->image, $x0, $y0, $x0, $y_top, $_color_axis);
-		
+		imageline($this->image, $x0, $y0, $x0, $y_top-$this->arrow_size[1], $_color_axis);
+        // 绘制箭头
+        imageline($this->image,
+            $this->margin_left - $this->arrow_size[0],
+            $this->axisY_top,
+            $this->margin_left,
+            $this->axisY_top - $this->arrow_size[1],
+            $_color_axis);
+        imageline($this->image,
+            $this->margin_left + $this->arrow_size[0],
+            $this->axisY_top,
+            $this->margin_left,
+            $this->axisY_top - $this->arrow_size[1],
+            $_color_axis);
+        // 绘制单位
+        imagettftext($this->image,
+            $this->str_fsize, 0,
+            $this->margin_left + $this->arrow_size[0],
+            $this->axisY_top - $this->arrow_size[1],
+            $_color_axis,
+            $_font,
+            '单位:'.$this->unit);
+
 		// 绘制X坐标轴
 		imageline($this->image, $x0, $y0, $x_right, $y0, $_color_axis);
+        // 绘制箭头
+        imageline($this->image,
+            $x_right - $this->arrow_size[0],
+            ($this->bg_size[1] - $this->margin_bottom - $this->arrow_size[1]),
+            $x_right,
+            $this->bg_size[1] - $this->margin_bottom,
+            $_color_axis);
+        imageline($this->image,
+            $x_right - $this->arrow_size[0],
+            ($this->bg_size[1] - $this->margin_bottom + $this->arrow_size[1]),
+            $x_right,
+            $this->bg_size[1] - $this->margin_bottom,
+            $_color_axis);
 
 		$_step_x = intval( ($x_right - $x0 - $this->square_size[0] ) /count($this->data) );
 		$_step_y = intval( ($y0 - $y_top ) /$this->axisy[1] );		//坐标步长
@@ -160,6 +197,7 @@ class SquareChart implements IChart
 			//绘制数值
 			imagestring ( $this->image , $this->en_fsize , $x0+$_space , $y0 - $_step_y * $j - imagefontheight($this->en_fsize)/2 , $this->axisy[0]*$j , $_color_str );
 		}
+
 		$i = 1;
 		foreach ( $this->data as $_key => $_val ) {
 			//绘制标尺
@@ -183,7 +221,7 @@ class SquareChart implements IChart
 
 			//绘制文字
 			//$_color = imagecolorallocate($this->image, $this->t_color[0], $this->t_color[1], $this->t_color[2]);
-			imagettftext($this->image, $this->str_fsize, 0, $_x1, $_y1-$_height-$this->square_size[1], $_color_str, $_font, $_val.$this->measure);
+			imagettftext($this->image, $this->str_fsize, 0, $_x1, $_y1-$_height-$this->square_size[1], $_color_str, $_font, $_val);
 
 			//绘制横坐标标度
 			$_ttf_box = imagettfbbox($this->str_fsize, 0, $_font, $_key);

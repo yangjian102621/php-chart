@@ -18,7 +18,7 @@ class ChartFactory {
 	private static $chartPool = array();
 
     /**
-     * create chart instance
+     * create single chart instance
      * @param $clazz
      * @param $config
      * @return IChart
@@ -26,12 +26,6 @@ class ChartFactory {
      */
 	public static function create($clazz, $config )
     {
-//		$_className = ucfirst($_key).'Chart';
-//		$_DIR = dirname(__FILE__).DIR_OS;
-//		$_classFile = $_DIR.'src'.DIR_OS.$_className.'.class.php';
-//		include $_DIR.'src'.DIR_OS.'IChart.class.php';
-//		include $_classFile;
-		//如果该实例已经创建, 则直接返回实例.
 		if ( !isset(self::$chartPool[$clazz]) ) {
             $reflect = new ReflectionClass($clazz);
 			self::$chartPool[$clazz] = $reflect->newInstance($config);

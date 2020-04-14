@@ -11,6 +11,12 @@ namespace chart\core;
  */
 interface IChart {
 
+    /**
+     * draw image
+     * @return IChart
+     */
+    public function draw();
+
 	/**
 	 * show chart in browser
 	 */

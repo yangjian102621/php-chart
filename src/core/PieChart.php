@@ -12,61 +12,61 @@ class PieChart implements IChart
 {
 	
 	/* size of canvas(画布大小) */
-	private $bg_size = array(600, 500);
+    public $bg_size = array(600, 500);
 	/* pie chart size */
-	private $pie_size = array(450, 150);
+    public $pie_size = array(450, 150);
 
 	/* image resource */
 	private $image = NULL;
 	/* chart data array */
-	private $data = array();
+    public $data = array();
 	/* title of chart */
-	private $title;
+    public $title;
 
 	/* title font */
-	private $t_font = 1;
+    public $t_font = 1;
 	/* string font */
-	private $str_font = 0;
+    public $str_font = 0;
 	/* title font size */
-	private $t_fsize = 20;
+    public $t_fsize = 20;
 	/* string font size */
-	private $str_fsize = 14;
+    public $str_fsize = 14;
 
 	/* pie layers */
-	private $pie_layers = 20;
+    public $pie_layers = 20;
 	/* color increase step (立体图颜色的递增步长) */
-	private $color_step = 2;
+    public $color_step = 2;
 
 	/* title space to chart (标题和图表的距离) */
-	private $t2c_space = 20;
+    public $t2c_space = 20;
 	/* chart space to note (图表和注解的距离) */
-	private $c2n_space = 30;
+    public $c2n_space = 30;
 	/* note 注解行距 */
-	private $note_space = 10;
+    public $note_space = 10;
 	/* 画布顶部边距 */
-	private $margin_top = 10;
+    public $margin_top = 10;
 	/* 画布底部边距 */
-	private $margin_bottom = 40;
+    public $margin_bottom = 40;
 
 	/* title position */
-	private $title_pos = array();
+    public $title_pos = array();
 	/* pie position */
-	private $pie_pos = array();
+    public $pie_pos = array();
 	/* node position */
-	private $note_pos = array();
+    public $note_pos = array();
 
 	/* background color for canvas */
-	private $bg_color = array(255, 255, 0);
+    public $bg_color = array(255, 255, 0);
 	/* title color */
-	private $t_color = array(180, 0, 0);
+    public $t_color = array(180, 0, 0);
 	/* string color */
-	private $str_color = array(128,0,255);
+    public $str_color = array(128,0,255);
 
 	private static $_FONT = array(
 		0 => 'hanyi.ttf',
 		1 => 'hanyi-xiu-ying.ttf'
 	);
-	private $font_dir = NULL;
+    public $font_dir = NULL;
 
 	public function __construct( $_config )
     {
@@ -98,12 +98,13 @@ class PieChart implements IChart
     /**
      * draw image
      */
-    private function draw()
+    public function draw()
     {
         $this->initCompPos();
         $this->image = $this->getImageCanvas($this->bg_size, $this->bg_color);
         $this->drawPie();
         $this->drawTitle();
+        return $this;
     }
 
 	/**
