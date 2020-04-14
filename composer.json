@@ -1,5 +1,5 @@
 {
-    "name": "rockyang/php-chart",
+    "name": "rockyangs/php-chart",
     "description": "A PHP chart library, implemented 2D / 3D broken line chart, bar chart, pie chart etc.",
     "type": "library",
     "keywords": ["php chart"],
