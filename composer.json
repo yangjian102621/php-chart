@@ -1,5 +1,5 @@
 {
-    "name": "herosphp/framework",
+    "name": "rockyang/php-chart",
     "description": "A PHP chart library, implemented 2D / 3D broken line chart, bar chart, pie chart etc.",
     "type": "library",
     "keywords": ["php chart"],
@@ -8,7 +8,7 @@
     "authors": [
         {
             "name": "blackfox",
-            "email": "yangjian102621@gmail.com"
+            "email": "yangjian102621@163.com"
         }
     ],
     "require": {

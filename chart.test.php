@@ -11,7 +11,7 @@ use chart\core\SquareChart;
  */
 require_once("./vendor/autoload.php");
 $dir = "temp";
-if (file_exists($dir)) {
+if (!file_exists($dir)) {
     mkdir($dir);
 }
 
