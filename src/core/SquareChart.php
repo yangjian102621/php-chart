@@ -22,7 +22,7 @@ class SquareChart implements IChart
 	/* y轴标点 步长 => 点数 */
 	private $axisy = array(100, 10);
 	/* measure of data (计数单位) */
-	private $measure = '名';
+	private $measure = '';
 	/* 英文字体大小 */
 	private $en_fsize = 3;
 	/* 坐标轴标尺长度 */
@@ -33,7 +33,8 @@ class SquareChart implements IChart
 	private $title;
 	/**
 	 * $t_chart 		int    	(图像类型)
-	 * 0 => 2D条形图	1 => 3D 条形图
+	 * 0 => 2D条形图
+	 * 1 => 3D 条形图
 	 * 2 => 3D 柱形图 
 	 */
 	private $t_chart = 1;

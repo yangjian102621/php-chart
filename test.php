@@ -2,6 +2,7 @@
 use chart\ChartFactory;
 use chart\core\BrokenChart;
 use chart\core\PieChart;
+use chart\core\SquareChart;
 
 /**
  * Class ${NAME}
@@ -31,6 +32,7 @@ $config = array(
     'bg_size' => array(800, 600)
 );
 
+/************** generate Broken Line Chart *******************/
 if (isCli()) {
     printf("----------- Try to generate Broken Line Chart... -------------\n");
 }
@@ -38,9 +40,21 @@ $chart = ChartFactory::create(BrokenChart::class, $config);
 if (!isCli()) {
     $chart->showChart();
 }
-$chart->saveChart("image/brokenchart.png", 'png');
+$chart->saveChart("image/broken-chart.png", 'png');
 if (isCli()) printf("Done.\n");
 
+/****************** generate Square Chart ************************/
+if (isCli()) {
+    printf("----------- Try to Square Chart... -------------\n");
+}
+$chart = ChartFactory::create(SquareChart::class, $config);
+$chart->saveChart("image/square-2D-chart.png", 'png');
+
+if (isCli()) {
+    printf("Done.\n");
+}
+
+/**************** generate Pie Chart ******************/
 if (isCli()) {
     printf("----------- Try to generate Pie Chart... -------------\n");
 }
@@ -53,10 +67,11 @@ $config = array(
     't_font' => 0
 );
 $chart = ChartFactory::create(PieChart::class, $config);
-$chart->saveChart("image/piechart.png", 'png');
+$chart->saveChart("image/pie-chart.png", 'png');
 if (isCli()) {
     printf("Done.\n");
 }
+
 /**
  * check if the scrpit run in a terminal
  * @return bool
